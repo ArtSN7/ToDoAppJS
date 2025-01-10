@@ -1,27 +1,49 @@
+// Import the password checking function from our service
 import { checkUserPassword } from '../data/service.js';
 
-
+// Add submit event listener to the login form
 document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault(); //  prevent from instant redirection
+    // Prevent the form from submitting normally
+    e.preventDefault();
 
-    // get user data from the form
-    const username = document.getElementById('username').value;
+    // Get form values and remove any extra spaces
+    const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value;
 
-    // store this data in the dictionary
-    const userData = { username, password };
-
-    console.log(userData);
-
-   if (checkUserPassword(username, password)) {
-        window.location.href = 'main.html' // redirect to the main page
-    } else {
-        alert('Wrong credentials')
+    // Check if either field is empty
+    if (!username || !password) {
+        showErrorMessage('Please fill in all fields');
+        return;
     }
 
-
-    // else need to show a message that the user already exists in the html page
-    
-    
-    
+    try {
+        // Check if username and password match
+        if (checkUserPassword(username, password)) {
+            // Store the username in localStorage to maintain session
+            localStorage.setItem('currentUser', username);
+            // Redirect to main page on successful login
+            window.location.href = 'main.html';
+        } else {
+            // Show error if credentials don't match
+            showErrorMessage('Invalid username or password');
+        }
+    } catch (error) {
+        // Handle any unexpected errors
+        showErrorMessage('An error occurred. Please try again.');
+        console.error('Login error:', error);
+    }
 });
+
+// Function to display error messages to the user
+function showErrorMessage(message) {
+    // Try to find error message element
+    const errorElement = document.getElementById('error-message');
+    if (errorElement) {
+        // Update error message text and show it
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    } else {
+        // Fallback to alert if error element not found
+        alert(message);
+    }
+}

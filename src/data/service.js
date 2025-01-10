@@ -1,100 +1,65 @@
-// Import the required 'fs' module
-const fs = require('fs');
-
-
-// Function to read JSON data from a file
-function readJsonFile(filePath) {
-    try {
-        const data = fs.readFileSync(filePath, 'utf-8'); // Read file content
-        return JSON.parse(data); // Parse and return JSON data
-    } catch (error) {
-        console.error('Error reading the JSON file:', error);
-        return null; // Return null in case of an error
-    }
+// Initialize the users array in localStorage if it doesn't exist yet
+// This ensures we always have a valid array to work with
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify([]));
 }
 
-// Function to write JSON data to a file
-function writeJsonFile(filePath, jsonData) {
-    try {
-        // Read the current data from the file
-        let data = readJsonFile(filePath);
-
-        // Add the new user to the data
-        data.push(jsonData);
-
-        // Convert the updated data back to a JSON string
-        const jsonString = JSON.stringify(data, null, 4); // Convert JSON data to string with indentation
-
-        // Write the updated string to the file
-        fs.writeFileSync(filePath, jsonString, 'utf-8'); // Write string to file
-
-        console.log('JSON data successfully written to', filePath);
-
-    } catch (error) {
-
-        console.error('Error writing to the JSON file:', error);
-    }
+// Helper function to get all users from localStorage
+// Returns an array of user objects or empty array if no users exist
+export function getUsers() {
+    return JSON.parse(localStorage.getItem('users')) || [];
 }
 
-// Function to check if a user already exists
-// true if there is a user with the same username or email
-function checkUserExists(username, email) {
-    const filePath = 'src/data/users.json';
-    const users = readJsonFile(filePath);
-
-    // check if the username or email already exists in the json file
-    return users.some(user => user.username === username) || users.some(user => user.email === email);
+// Helper function to save users array back to localStorage
+// Takes the entire users array and overwrites the existing data
+function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
 }
 
-// Function to add a new user to the database
-function addUserToDatabase(username, email, password) { // returns true if the user was added, false if the user already exists
-    // Path to the JSON file
-    const filePath = 'src/data/users.json';
+// Check if a user with the given username or email already exists
+// Returns true if either username or email is already taken
+export function checkUserExists(username, email) {
+    const users = getUsers();
+    return users.some(user => 
+        user.username === username || user.email === email
+    );
+}
 
-    // Read the JSON file
-    const users = readJsonFile(filePath);
-
-    // check if the username or email already exists in the json file
+// Add a new user to the system
+// Returns true if user was added successfully, false if user already exists
+export function addUser(username, email, password) {
+    // First check if user already exists
     if (checkUserExists(username, email)) {
-        // console.log('User already exists');
         return false;
     }
-
-    // Add a new user and write back to the file
-    const newUser = {
-        username: username,
-        email: email,
-        password: password
-    };
-
-    users.push(newUser);
-    writeJsonFile(filePath, users);
-
+    
+    // Get current users array
+    const users = getUsers();
+    
+    // Add new user to array
+    users.push({
+        username,
+        email,
+        password // Note: In a real app, password should be hashed
+    });
+    
+    // Save updated users array
+    saveUsers(users);
     return true;
-
-    // console.log('User added successfully');
-}  
-
-
-// Function to check user password
-// returns true if the password is correct
-function checkUserPassword(username, password) {
-    const filePath = 'src/data/users.json';
-    const users = readJsonFile(filePath);
-    const user = users.find(user => user.username === username);
-
-    console.log(user.password === password);
-    return user.password === password;
 }
 
-
-
-
-//      tests for addUserToDatabase
-
-// checkUserPassword('artem_sorokin', 'LolArt10230123'); true
-// checkUserPassword('artem_sorokin', 'LolArt1023asdasdwdqwe3'); false
-
-// addUserToDatabase('john_doe', 'john@example.com', 'Lallal10230123'); // user already exists
-// addUserToDatabase('artem_sorokin', 'sorokin@example.com', 'LolArt10230123'); // add user
-// addUserToDatabase('artem_sorokin', 'sorokin@example.com', 'LolArt10230123'); // user already exists
+// Verify user's password
+// Returns true if username exists and password matches
+export function checkUserPassword(username, password) {
+    // Get all users and find the one with matching username
+    const users = getUsers();
+    const user = users.find(u => u.username === username);
+    
+    // If no user found with this username, return false
+    if (!user) {
+        return false;
+    }
+    
+    // Compare passwords (in real app, would compare hashed passwords)
+    return user.password === password;
+}
