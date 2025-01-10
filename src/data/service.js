@@ -1,4 +1,5 @@
 const fs = require('fs');
+
 // Function to read JSON data from a file
 export function readJsonFile(filePath) {
     try {
@@ -6,9 +7,10 @@ export function readJsonFile(filePath) {
         return JSON.parse(data); // Parse and return JSON data
     } catch (error) {
         console.error('Error reading the JSON file:', error);
-        return null; // Return null in case of an error
+        return []; // Return empty array in case of an error
     }
 }
+
 // Function to write JSON data to a file
 export function writeJsonFile(filePath, jsonData) {
     try {
@@ -25,14 +27,17 @@ export function writeJsonFile(filePath, jsonData) {
         console.error('Error writing to the JSON file:', error);
     }
 }
+
 // Function to check if a user already exists
 // true if there is a user with the same username or email
 export function checkUserExists(username, email) {
     const filePath = 'src/data/users.json';
     const users = readJsonFile(filePath);
+    if (!users) return false;
     // check if the username or email already exists in the json file
     return users.some(user => user.username === username) || users.some(user => user.email === email);
 }
+
 // Function to add a new user to the database
 export function addUserToDatabase(username, email, password) { // returns true if the user was added, false if the user already exists
     // Path to the JSON file
@@ -41,7 +46,7 @@ export function addUserToDatabase(username, email, password) { // returns true i
     const users = readJsonFile(filePath);
     // check if the username or email already exists in the json file
     if (checkUserExists(username, email)) {
-        // console.log('User already exists');
+        console.log('User already exists');
         return false;
     }
     // Add a new user and write back to the file
@@ -53,16 +58,26 @@ export function addUserToDatabase(username, email, password) { // returns true i
     users.push(newUser);
     writeJsonFile(filePath, users);
     return true;
-    // console.log('User added successfully');
 }  
-
 
 // Function to check user password
 // returns true if the password is correct
 export function checkUserPassword(username, password) {
-    const filePath = 'src/data/users.json';
-    const users = readJsonFile(filePath);
-    const user = users.find(user => user.username === username);
-    console.log(user.password === password);
-    return user.password === password;
+    try {
+        const filePath = 'src/data/users.json';
+        const users = readJsonFile(filePath);
+        if (!users) return false;
+        
+        const user = users.find(user => user.username === username);
+        if (!user) {
+            console.log('User not found');
+            return false;
+        }
+        
+        console.log('Password check:', user.password === password);
+        return user.password === password;
+    } catch (error) {
+        console.error('Error checking password:', error);
+        return false;
+    }
 }
