@@ -57,6 +57,11 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         console.log('Adding new user...');
         if (addUserToDatabase(username, email, password)) {
             console.log('Signup successful');
+
+            // TASK : NEED TO STORE SOMEWHERE his name for the future use
+            localStorage.setItem('currentUser', username);
+
+            // Redirect to main.html
             window.location.href = 'main.html';
         } else {
             console.log('Failed to add user');

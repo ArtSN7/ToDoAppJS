@@ -20,6 +20,11 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         
         if (checkUserPassword(username, password)) {
             console.log('Login successful');
+
+            // STORE SOMEWHERE his name for the future use
+            localStorage.setItem('currentUser', username);
+
+            // Redirect to main.html
             window.location.href = 'main.html';
         } else {
             console.log('Login failed');
