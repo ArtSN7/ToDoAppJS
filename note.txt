@@ -1,0 +1,1 @@
+npx http-server /Users/artems/Desktop/ToDoAppJS/src -p 8000

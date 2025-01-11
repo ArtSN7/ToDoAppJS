@@ -1,83 +1,52 @@
-const fs = require('fs');
+// Initialize the users array in localStorage if it doesn't exist
+if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify([]));
+}
 
-// Function to read JSON data from a file
-export function readJsonFile(filePath) {
+// Function to read data from localStorage
+function readData() {
     try {
-        const data = fs.readFileSync(filePath, 'utf-8'); // Read file content
-        return JSON.parse(data); // Parse and return JSON data
+        return JSON.parse(localStorage.getItem('users')) || [];
     } catch (error) {
-        console.error('Error reading the JSON file:', error);
-        return []; // Return empty array in case of an error
+        console.error('Error reading from localStorage:', error);
+        return [];
     }
 }
 
-// Function to write JSON data to a file
-export function writeJsonFile(filePath, jsonData) {
+// Function to write data to localStorage
+function writeData(data) {
     try {
-        // Read the current data from the file
-        let data = readJsonFile(filePath);
-        // Add the new user to the data
-        data.push(jsonData);
-        // Convert the updated data back to a JSON string
-        const jsonString = JSON.stringify(data, null, 4); // Convert JSON data to string with indentation
-        // Write the updated string to the file
-        fs.writeFileSync(filePath, jsonString, 'utf-8'); // Write string to file
-        console.log('JSON data successfully written to', filePath);
+        localStorage.setItem('users', JSON.stringify(data));
+        return true;
     } catch (error) {
-        console.error('Error writing to the JSON file:', error);
+        console.error('Error writing to localStorage:', error);
+        return false;
     }
 }
 
 // Function to check if a user already exists
-// true if there is a user with the same username or email
 export function checkUserExists(username, email) {
-    const filePath = 'src/data/users.json';
-    const users = readJsonFile(filePath);
-    if (!users) return false;
-    // check if the username or email already exists in the json file
-    return users.some(user => user.username === username) || users.some(user => user.email === email);
+    const users = readData();
+    return users.some(user => user.username === username || user.email === email);
 }
 
-// Function to add a new user to the database
-export function addUserToDatabase(username, email, password) { // returns true if the user was added, false if the user already exists
-    // Path to the JSON file
-    const filePath = 'src/data/users.json';
-    // Read the JSON file
-    const users = readJsonFile(filePath);
-    // check if the username or email already exists in the json file
-    if (checkUserExists(username, email)) {
-        console.log('User already exists');
-        return false;
+// Function to add a new user
+export function addUserToDatabase(username, email, password) {
+    try {
+        const users = readData();
+        const newUser = { username, email, password };
+        users.push(newUser);
+        writeData(users);
+        return { success: true };
+    } catch (error) {
+        console.error('Error adding user:', error);
+        return { success: false, error: error.message };
     }
-    // Add a new user and write back to the file
-    const newUser = {
-        username: username,
-        email: email,
-        password: password
-    };
-    users.push(newUser);
-    writeJsonFile(filePath, users);
-    return true;
-}  
+}
 
 // Function to check user password
-// returns true if the password is correct
 export function checkUserPassword(username, password) {
-    try {
-        const filePath = 'src/data/users.json';
-        const users = readJsonFile(filePath);
-        if (!users) return false;
-        
-        const user = users.find(user => user.username === username);
-        if (!user) {
-            console.log('User not found');
-            return false;
-        }
-        
-        console.log('Password check:', user.password === password);
-        return user.password === password;
-    } catch (error) {
-        console.error('Error checking password:', error);
-        return false;
-    }
+    const users = readData();
+    const user = users.find(u => u.username === username);
+    return user && user.password === password;
 }
