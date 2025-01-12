@@ -3,10 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="../static/main.css">
 </head>
 <body>
-    <h1>main</h1>
+    <div class="container">
+        <div class="header">Just Do It.</div>
+
+        <form id="task_input">
+            <input type="text" id="task" placeholder="Add a task..." required>
+            <input type="date" id="due-date", placeholder="Due Date..." required>
+            <input type="time" id="due-time", placeholder="Due Time..." value="12:00">
+            <select name="choose_priority" id="priority" title="Choose Priority" value="Low">
+                <option value="1">Low</option>
+                <option value="2">Medium</option>
+                <option value="3">High</option>
+            </select>
+            <button type="submit" id="AddTaskButton">Add Task</button>
+        </form>
+
+        <div class="task-list" id="task-list">
+            <!-- Tasks will appear here dynamically -->
+        </div>
+
+        <div class="footer" id="current-date"></div>
+    </div>
+
+    <script src="../pages/main.js"></script>
 </body>
-<script src="../pages/main.js"></script>
 </html>

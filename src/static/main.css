@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #2c5364, #0f2027);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form input[type="text"],
+form input[type="date"] {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #218838;
+}
+
+.task-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.task-item #task-date {
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.task-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-text {
+    display: flex;
+    flex-direction: column;
+    color: #333;
+}
+
+.task-date {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.task-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.task-time {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.task-priority {
+    font-size: 0.8em;
+    color: red;
+}
+
+.task-checkbox {
+    width: 18px;
+    height: 18px;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+.edit-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    opacity: 0.8;
+}
+
