@@ -17,6 +17,16 @@ function initializeApp() {
 
     // Load tasks from localStorage
     loadTasks();
+    loadProperties();
+}
+
+function loadProperties() {
+    const username = JSON.parse(localStorage.getItem('users'))[0].username;
+    const date = new Date().toLocaleDateString();
+    const task_count = JSON.parse(localStorage.getItem('tasks')).length;
+    document.getElementById('username').textContent = `Name: ${username}`;
+    document.getElementById('date').textContent = `Date: ${date}`;
+    document.getElementById('task_count').textContent = `Tasks: ${task_count}`;
 }
 
 function addNewTask() {
@@ -35,6 +45,7 @@ function addNewTask() {
 
     // Reset form
     elements.form.reset();
+
 }
 
 function validateTask(taskText, taskDate) {
@@ -127,6 +138,8 @@ function saveTasks() {
         });
     });
     localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    loadProperties();
 }
 
 function saveTask(taskText, taskDate, taskTime, taskPriority) {

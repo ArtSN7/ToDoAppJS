@@ -6,13 +6,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
+    padding-top: 0;
 }
 
 .container {
     text-align: center;
-    max-width: 600px;
+    max-width: 1000px;
     width: 100%;
     padding: 20px;
     border-radius: 8px;
@@ -153,4 +153,29 @@ form button:hover {
 .edit-btn:hover, .delete-btn:hover {
     opacity: 0.8;
 }
+
+.featured-properties {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 50px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 30px;
+}
+
+.upper_data {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 10px 20px;
+}
+
+.upper_data p {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
 
